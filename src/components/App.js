@@ -2,7 +2,6 @@ import { Tabs, Tab } from 'react-bootstrap'
 import dBank from '../abis/dBank.json'
 import React, { Component } from 'react';
 import Token from '../abis/Token.json'
-import dbank from '../dbank.png';
 import Web3 from 'web3';
 import './App.css';
 
