@@ -155,7 +155,15 @@ class App extends Component {
                 </Tab>
               </Tabs>
               </div>
+
             </main>
+            <div className="container">
+              <div className="row">
+                <div className="col text-center">
+            {typeof window.ethereum!=='undefined'?<button className="btn btn-prinary btn-light" onClick={((e)=>this.loadBlockchainData(e))}>Connect to MetaMask</button>:<div></div>}
+          </div>
+          </div>
+          </div>
           </div>
         </div>
       </div>
