@@ -106,7 +106,7 @@ class App extends Component {
         </nav>
         <div className="container-fluid mt-5 text-center">
         <br></br>
-          <h1>Welcome to BNB TRADE <img src={bnbLogo} style={{height:"40px"}}/></h1>
+          <h1>Welcome to BNB TRADE <img src={bnbLogo} style={{height:"40px"}} alt="bnb logo"/></h1>
           <h2>{`Your ID: ${this.state.account}`}</h2>
           <br></br>
           <div className="row">
