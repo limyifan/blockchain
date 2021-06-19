@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Token from '../abis/Token.json'
 import Web3 from 'web3';
 import './App.css';
+import bnbLogo from "../assets/bnb.png"
 
 class App extends Component {
 
@@ -105,8 +106,8 @@ class App extends Component {
         </nav>
         <div className="container-fluid mt-5 text-center">
         <br></br>
-          <h1>Welcome to d₿ank</h1>
-          <h2>{this.state.account}</h2>
+          <h1>Welcome to BNB TRADE <img src={bnbLogo} style={{height:"40px"}}/></h1>
+          <h2>{`Your ID: ${this.state.account}`}</h2>
           <br></br>
           <div className="row">
             <main role="main" className="col-lg-12 d-flex text-center">
@@ -117,7 +118,7 @@ class App extends Component {
                   <br></br>
                     How much do you want to deposit?
                     <br></br>
-                    (min. amount is 0.01 ETH)
+                    (min. amount is 0.01 BNB)
                     <br></br>
                     (1 deposit is possible at the time)
                     <br></br>

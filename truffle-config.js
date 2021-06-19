@@ -1,70 +1,56 @@
-require('babel-register');
-require('babel-polyfill');
-require('dotenv').config();
-const HDWalletProvider = require('truffle-hdwallet-provider-privkey');
-const privateKeys = process.env.PRIVATE_KEYS || ""
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const fs = require('fs');
+const memonic = fs.readFileSync(".secret").toString().trim();
+const provider= new HDWalletProvider({
+  privateKeys:['819519033d54701f9ac18840ca77f46da8bce195047ae904f7ad75ee16f27c30'],
+  providerOrUrl:"wss://data-seed-prebsc-1-s1.binance.org:8545"
 
+})
 module.exports = {
   networks: {
     development: {
-      host: "127.0.0.1",
-      port: 7545,
-      network_id: "*" // Match any network id
+      host: "127.0.0.1",     // Localhost (default: none)
+      port: 8545,            // Standard BSC port (default: none)
+      network_id: "*",       // Any network (default: none)
+    },
+    testnet: {
+      provider: () => provider,
+      network_id: "97",
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
+    bsc: {
+      provider: () => new HDWalletProvider(memonic, `https://bsc-dataseed1.binance.org`),
+      network_id: 56,
+      confirmations: 10,
+      timeoutBlocks: 200,
+      skipDryRun: true
     },
     kovan: {
       provider: function() {
-        return new HDWalletProvider(
-          privateKeys.split(','), // Array of account private keys
-          `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`// Url to an Ethereum Node
-        )
+        return new HDWalletProvider(memonic, "https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161");
       },
-      gas: 5000000,
-      gasPrice: 5000000000, // 5 gwei
-      network_id: 42
-    },
-    main: {
-      provider: function() {
-        return new HDWalletProvider(
-          privateKeys.split(','), // Array of account private keys
-          `https://main.infura.io/v3/${process.env.INFURA_API_KEY}`// Url to an Ethereum Node
-        )
-      },
-      gas: 5000000,
-      gasPrice: 5000000000, // 5 gwei
-      network_id: 1
-    },
-    rinkeby: {
-      provider: function() {
-        return new HDWalletProvider(
-          privateKeys.split(','), // Array of account private keys
-          `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`// Url to an Ethereum Node
-        )
-      },
-      gas: 5000000,
-      gasPrice: 5000000000, // 5 gwei
-      network_id: 4
-    },
-    ropsten: {
-      provider: function() {
-        return new HDWalletProvider(
-          privateKeys.split(','), // Array of account private keys
-          `https://ropsten.infura.io/v3/${process.env.INFURA_API_KEY}`// Url to an Ethereum Node
-        )
-      },
-      gas: 5000000,
-      gasPrice: 5000000000, // 5 gwei
-      network_id: 3
+      network_id: 42,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      gas: 7500000,
+      gasPrice: 100000000,
     }
   },
+
+  // Set default mocha options here, use special reporters etc.
+  mocha: {
+    // timeout: 100000
+  },
+
+  // Configure your compilers
   contracts_directory: './src/contracts/',
   contracts_build_directory: './src/abis/',
   compilers: {
     solc: {
-      version: ">=0.6.0 <0.8.0",
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
+      version: "^0.6.12", // A version or constraint - Ex. "^0.5.0"
     }
   }
 }
