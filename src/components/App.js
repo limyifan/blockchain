@@ -45,7 +45,7 @@ class App extends Component {
   async deposit(amount) {
     if(this.state.dbank!=='undefined'){
       try{
-        await this.state.dbank.methods.deposit().send({value: amount.toString(), from: this.state.account})
+        await this.state.dbank.methods().deposit().send({value: amount.toString(), from: this.state.account})
       } catch (e) {
         console.log('Error, deposit: ', e)
       }
@@ -160,7 +160,7 @@ class App extends Component {
             <div className="container">
               <div className="row">
                 <div className="col text-center">
-            {typeof window.ethereum!=='undefined'?<button className="btn btn-prinary btn-light" onClick={((e)=>this.loadBlockchainData(e))}>Connect to MetaMask</button>:<div></div>}
+            {typeof window.ethereum==='undefined'?<button className="btn btn-prinary btn-light" onClick={(e)=>{this.loadBlockchainData(e);window.alert("You may need to manually connect MetaMask to this website");}}>Connect to MetaMask</button>:<div></div>}
           </div>
           </div>
           </div>

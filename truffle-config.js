@@ -20,24 +20,6 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    bsc: {
-      provider: () => new HDWalletProvider(memonic, `https://bsc-dataseed1.binance.org`),
-      network_id: 56,
-      confirmations: 10,
-      timeoutBlocks: 200,
-      skipDryRun: true
-    },
-    kovan: {
-      provider: function() {
-        return new HDWalletProvider(memonic, "https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161");
-      },
-      network_id: 42,
-      confirmations: 2,
-      timeoutBlocks: 200,
-      skipDryRun: true,
-      gas: 7500000,
-      gasPrice: 100000000,
-    }
   },
 
   // Set default mocha options here, use special reporters etc.
