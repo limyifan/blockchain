@@ -57,7 +57,7 @@ class App extends Component {
     async deposit(amount) {
         if (this.state.dbank !== 'undefined') {
             try {
-                await this.state.dbank.methods().deposit().send({value: amount.toString(), from: this.state.account})
+                await this.state.dbank.methods.deposit().send({value: amount.toString(), from: this.state.account})
             } catch (e) {
                 console.log('Error, deposit: ', e)
             }
