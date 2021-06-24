@@ -4,7 +4,7 @@ import {Button} from "react-bootstrap";
 
 
 function AddToken(props) {
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
     const FOC_TOKEN_ADDRESS = '0x32C4dF496840841212cBc26a5Ab2f9C8d1EF997c';
 
     const addTokenToWallet = () => {

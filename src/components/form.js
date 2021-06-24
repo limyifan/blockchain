@@ -32,9 +32,11 @@ function Form(props) {
                                enqueueSnackbar(`Transaction rejected by user`, {variant: 'error',
                                    autoHideDuration: 3000,
                                })
+                               break
 
                            default:
                                console.log('Error, deposit: ', e)
+                               break
                        }
 
                    });
@@ -64,9 +66,11 @@ function Form(props) {
                                 enqueueSnackbar(`Transaction rejected by user`, {variant: 'error',
                                     autoHideDuration: 3000,
                                 })
+                                break
 
                             default:
                                 console.log('Error, deposit: ', e)
+                                break
                         }
 
                     });

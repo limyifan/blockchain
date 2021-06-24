@@ -1,4 +1,3 @@
-import {Tabs, Tab, Button} from 'react-bootstrap'
 import dBank from '../abis/dBank.json'
 import React, {Component} from 'react';
 import Token from '../abis/Token.json'
