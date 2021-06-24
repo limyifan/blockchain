@@ -1,11 +1,13 @@
-import {Tabs, Tab} from 'react-bootstrap'
+import {Tabs, Tab, Button} from 'react-bootstrap'
 import dBank from '../abis/dBank.json'
 import React, {Component} from 'react';
 import Token from '../abis/Token.json'
 import Web3 from 'web3';
 import './App.css';
 import bnbLogo from "../assets/bnb.png"
-
+import Form from "./form";
+import AddToken from"./addToken"
+import { SnackbarProvider } from 'notistack';
 class App extends Component {
 
     constructor(props) {
@@ -21,7 +23,23 @@ class App extends Component {
     }
 
     async componentWillMount() {
+        await networkSetup()
         await this.loadBlockchainData(this.props.dispatch)
+    }
+ async componentDidUpdate(prevProps, prevState, snapshot) {
+    await this.updateBalance();
+ }
+
+    async updateBalance() {
+        if(typeof this.state.web3!=="undefined")
+        {
+            if (typeof this.state.account !== 'undefined') {
+                const balance = await this.state.web3.eth.getBalance(this.state.account)
+
+                    this.setState({ balance: balance})
+            }
+        }
+
     }
 
     async loadBlockchainData(dispatch) {
@@ -54,27 +72,6 @@ class App extends Component {
         }
     }
 
-    async deposit(amount) {
-        if (this.state.dbank !== 'undefined') {
-            try {
-                await this.state.dbank.methods.deposit().send({value: amount.toString(), from: this.state.account})
-            } catch (e) {
-                console.log('Error, deposit: ', e)
-            }
-        }
-    }
-
-    async withdraw(e) {
-        e.preventDefault()
-        if (this.state.dbank !== 'undefined') {
-            try {
-                await this.state.dbank.methods.withdraw().send({from: this.state.account})
-            } catch (e) {
-                console.log('Error, withdraw: ', e)
-            }
-        }
-    }
-
     async borrow(amount) {
         if (this.state.dbank !== 'undefined') {
             try {
@@ -101,82 +98,64 @@ class App extends Component {
 
     render() {
         return (
+            <SnackbarProvider >
             <div className='text-monospace'>
                 <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
                 </nav>
                 <div className="container-fluid mt-5 text-center">
+                    <img src={bnbLogo} style={{height: "100px"}} alt="bnb logo"/>
+                    <h1>Welcome to BNB TRADE </h1>
+                    <h3>{`Your ID: `}<p>{this.state.account}</p></h3>
+                    <h3>{`Your Balance: `}<p>{Web3.utils.fromWei(this.state.balance.toString(), 'ether')} BNB</p></h3>
                     <br></br>
-                    <h1>Welcome to BNB TRADE <img src={bnbLogo} style={{height: "40px"}} alt="bnb logo"/></h1>
-                    <h2>{`Your ID: ${this.state.account}`}</h2>
-                    <br></br>
-                    <div className="row">
-                        <main role="main" className="col-lg-12 d-flex text-center">
-                            <div className="content mr-auto ml-auto">
-                                <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
-                                    <Tab eventKey="deposit" title="Deposit">
-                                        <div>
-                                            <br></br>
-                                            How much do you want to deposit?
-                                            <br></br>
-                                            (min. amount is 0.01 BNB)
-                                            <br></br>
-                                            (1 deposit is possible at the time)
-                                            <br></br>
-                                            <form onSubmit={(e) => {
-                                                e.preventDefault()
-                                                let amount = this.depositAmount.value
-                                                amount = amount * 10 ** 18 //convert to wei
-                                                this.deposit(amount)
-                                            }}>
-                                                <div className='form-group mr-sm-2'>
-                                                    <br></br>
-                                                    <input
-                                                        id='depositAmount'
-                                                        step="0.01"
-                                                        type='number'
-                                                        ref={(input) => {
-                                                            this.depositAmount = input
-                                                        }}
-                                                        className="form-control form-control-md"
-                                                        placeholder='amount...'
-                                                        required/>
-                                                </div>
-                                                <button type='submit' className='btn btn-primary'>DEPOSIT</button>
-                                            </form>
+<Form dbank={this.state.dbank} account={this.state.account} loadBlockchainData={this.loadBlockchainData} updateBalance={this.updateBalance}/>
+                    <AddToken/>
 
-                                        </div>
-                                    </Tab>
-                                    <Tab eventKey="withdraw" title="Withdraw">
-                                        <br></br>
-                                        Do you want to withdraw + take interest?
-                                        <br></br>
-                                        <br></br>
-                                        <div>
-                                            <button type='submit' className='btn btn-primary'
-                                                    onClick={(e) => this.withdraw(e)}>WITHDRAW
-                                            </button>
-                                        </div>
-                                    </Tab>
-                                </Tabs>
-                            </div>
-
-                        </main>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col text-center">
-                                    {typeof window.ethereum === 'undefined' ?
-                                        <button className="btn btn-prinary btn-light" onClick={(e) => {
-                                            this.loadBlockchainData(e);
-                                            window.alert("You may need to manually connect MetaMask to this website");
-                                        }}>Connect to MetaMask</button> : <div></div>}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
+            </SnackbarProvider>
         );
     }
 }
+const networkSettings = {
+    56: {
+        chainId: '0x38',
+        chainName: 'BSC Mainnet',
+        nativeCurrency: {
+            name: 'Binance Coin',
+            symbol: 'BNB',
+            decimals: 18,
+        },
+        rpcUrls: ['https://bsc-dataseed.binance.org'],
+        blockExplorerUrls: ['https://bscscan.com/'],
+    },
+    97: {
+        chainId: '0x61',
+        chainName: 'BSC TestNet',
+        nativeCurrency: {
+            name: 'Binance Coin',
+            symbol: 'BNB',
+            decimals: 18,
+        },
+        rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+        blockExplorerUrls: ['https://testnet.bscscan.com/'],
+    },
+
+};
+export const networkSetup = () => {
+    return new Promise((resolve, reject) => {
+        const provider = window.ethereum;
+        if (provider) {
+                provider
+                    .request({
+                        method: 'wallet_addEthereumChain',
+                        params: [networkSettings[97]],
+                    })
+                    .then(resolve)
+                    .catch(reject);
+            }
+
+    });
+};
 
 export default App;
