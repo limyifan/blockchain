@@ -54,7 +54,7 @@ function AddToken(props) {
     }
     return (
         <div><Button className={"btn btn-primary btn-light"} onClick={addTokenToWallet}>
-            Add DBC Token <img src={"https://image.flaticon.com/icons/png/512/616/616408.png"} height={"40"}/>
+            Add DBC Token <img src={"https://image.flaticon.com/icons/png/512/616/616408.png"} height={"40"} alt={"DBC ICON"}/>
         </Button></div>
 
     );
