@@ -14,6 +14,7 @@ class App extends Component {
         this.state = {
             web3: 'undefined',
             account: '',
+            depositedEther:0,
             token: null,
             dbank: null,
             balance: 0,
@@ -30,12 +31,11 @@ class App extends Component {
  }
 
     async updateBalance() {
-        if(typeof this.state.web3!=="undefined")
+        if( this.state.dbank!==null)
         {
             if (typeof this.state.account !== 'undefined') {
-                const balance = await this.state.web3.eth.getBalance(this.state.account)
-
-                    this.setState({ balance: balance})
+                const depositedEther= await this.state.dbank.methods.etherBalanceOf(this.state.account).call({from:this.state.account})
+                this.setState({depositedEther:depositedEther})
             }
         }
 
@@ -105,7 +105,7 @@ class App extends Component {
                     <img src={bnbLogo} style={{height: "100px"}} alt="bnb logo"/>
                     <h1>Welcome to BNB TRADE </h1>
                     <h3>{`Your ID: `}<p>{this.state.account}</p></h3>
-                    <h3>{`Your Balance: `}<p>{Web3.utils.fromWei(this.state.balance.toString(), 'ether')} BNB</p></h3>
+                    <h3>{`Your Deposited Balance: `}<p>{Web3.utils.fromWei(this.state.depositedEther.toString(), 'ether')} BNB</p></h3>
                     <br></br>
 <Form dbank={this.state.dbank} account={this.state.account} loadBlockchainData={this.loadBlockchainData} updateBalance={this.updateBalance}/>
                     <AddToken/>
